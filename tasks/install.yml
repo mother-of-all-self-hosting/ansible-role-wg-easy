@@ -1,0 +1,62 @@
+---
+
+- name: Ensure WireGuard Easy paths exist
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0750
+    owner: "{{ wg_easy_uid }}"
+    group: "{{ wg_easy_gid }}"
+  with_items:
+    - "{{ wg_easy_base_path }}"
+    - "{{ wg_easy_data_path }}"
+
+- name: Ensure WireGuard Easy support files installed
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/{{ item }}.j2"
+    dest: "{{ wg_easy_base_path }}/{{ item }}"
+    mode: 0640
+    owner: "{{ wg_easy_uid }}"
+    group: "{{ wg_easy_gid }}"
+  with_items:
+    - env
+    - labels
+
+- name: Ensure WireGuard Easy container image is pulled via community.docker.docker_image
+  when: devture_systemd_docker_base_container_image_pull_method == 'ansible-module'
+  community.docker.docker_image:
+    name: "{{ wg_easy_container_image }}"
+    source: "{{ 'pull' if ansible_version.major > 2 or ansible_version.minor > 7 else omit }}"
+    force_source: "{{ wg_easy_container_image_force_pull if ansible_version.major > 2 or ansible_version.minor >= 8 else omit }}"
+    force: "{{ omit if ansible_version.major > 2 or ansible_version.minor >= 8 else wg_easy_container_image_force_pull }}"
+  register: result
+  retries: "{{ devture_playbook_help_container_retries_count }}"
+  delay: "{{ devture_playbook_help_container_retries_delay }}"
+  until: result is not failed
+
+- name: Ensure WireGuard Easy container image is pulled via command
+  when: devture_systemd_docker_base_container_image_pull_method == 'command'
+  ansible.builtin.command:
+    cmd: "{{ devture_systemd_docker_base_host_command_docker }} pull {{ wg_easy_container_image }}"
+  register: result
+  retries: "{{ devture_playbook_help_container_retries_count }}"
+  delay: "{{ devture_playbook_help_container_retries_delay }}"
+  until: result is not failed
+
+- name: Ensure WireGuard Easy container network is created via community.docker.docker_network
+  when: devture_systemd_docker_base_container_network_creation_method == 'ansible-module'
+  community.general.docker_network:
+    name: "{{ wg_easy_container_network }}"
+    driver: bridge
+
+- name: Ensure WireGuard Easy container network exists via command
+  when: devture_systemd_docker_base_container_network_creation_method == 'command'
+  ansible.builtin.command:
+    cmd: "{{ devture_systemd_docker_base_host_command_docker }} network create {{ wg_easy_container_network }}"
+  register: network_creation_result
+  failed_when: network_creation_result.rc != 0 and 'already exists' not in network_creation_result.stderr
+
+- name: Ensure WireGuard Easy systemd service is present
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/systemd/wg-easy.service.j2"
+    dest: "{{ devture_systemd_docker_base_systemd_path }}/{{ wg_easy_identifier }}.service"

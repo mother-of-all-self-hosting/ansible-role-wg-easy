@@ -1,0 +1,62 @@
+#jinja2: lstrip_blocks: "True"
+[Unit]
+Description=WireGuard Easy ({{ wg_easy_identifier }})
+{% for service in wg_easy_systemd_required_services_list %}
+Requires={{ service }}
+After={{ service }}
+{% endfor %}
+DefaultDependencies=no
+
+[Service]
+Type=simple
+Environment="HOME={{ devture_systemd_docker_base_systemd_unit_home_path }}"
+ExecStartPre=-{{ devture_systemd_docker_base_host_command_sh }} -c '{{ devture_systemd_docker_base_host_command_docker }} kill {{ wg_easy_identifier }} 2>/dev/null || true'
+ExecStartPre=-{{ devture_systemd_docker_base_host_command_sh }} -c '{{ devture_systemd_docker_base_host_command_docker }} rm {{ wg_easy_identifier }} 2>/dev/null || true'
+
+ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} create \
+			--rm \
+			--name={{ wg_easy_identifier }} \
+			--log-driver=none \
+			--cap-drop=ALL \
+			--cap-add=NET_ADMIN \
+			--cap-add=NET_RAW \
+			--cap-add=SYS_MODULE \
+			--cap-add=FOWNER \
+			--cap-add=DAC_OVERRIDE \
+			--read-only \
+			--network={{ wg_easy_container_network }} \
+			{% if wg_easy_container_wireguard_bind_port %}
+			-p {{ wg_easy_container_wireguard_bind_port }}:51820/udp \
+			{% endif %}
+			{% if wg_easy_container_http_bind_port %}
+			-p {{ wg_easy_container_http_bind_port }}:51821/tcp \
+			{% endif %}
+			--env-file={{ wg_easy_base_path }}/env \
+			--label-file={{ wg_easy_base_path }}/labels \
+			--tmpfs=/run:rw,noexec,nosuid,size=100m \
+			--mount type=bind,src={{ wg_easy_data_path }},dst=/etc/wireguard \
+			{% for volume in wg_easy_container_additional_volumes %}
+			--mount type={{ volume.type | default('bind' if '/' in volume.src else 'volume') }},src={{ volume.src }},dst={{ volume.dst }}{{ (',' + volume.options) if volume.options | default('') else '' }} \
+			{% endfor %}
+			--sysctl="net.ipv4.conf.all.src_valid_mark=1" \
+			--sysctl="net.ipv4.ip_forward=1" \
+			{% for arg in wg_easy_container_extra_arguments %}
+			{{ arg }} \
+			{% endfor %}
+			{{ wg_easy_container_image }}
+
+{% for network in wg_easy_container_additional_networks %}
+ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} network connect {{ network }} {{ wg_easy_identifier }}
+{% endfor %}
+
+ExecStart={{ devture_systemd_docker_base_host_command_docker }} start --attach {{ wg_easy_identifier }}
+
+ExecStop=-{{ devture_systemd_docker_base_host_command_sh }} -c '{{ devture_systemd_docker_base_host_command_docker }} kill {{ wg_easy_identifier }} 2>/dev/null || true'
+ExecStop=-{{ devture_systemd_docker_base_host_command_sh }} -c '{{ devture_systemd_docker_base_host_command_docker }} rm {{ wg_easy_identifier }} 2>/dev/null || true'
+
+Restart=always
+RestartSec=30
+SyslogIdentifier={{ wg_easy_identifier }}
+
+[Install]
+WantedBy=multi-user.target

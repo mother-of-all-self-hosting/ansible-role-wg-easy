@@ -1,0 +1,20 @@
+---
+
+- block:
+    - when: wg_easy_enabled | bool
+      ansible.builtin.include_tasks: "{{ role_path }}/tasks/validate_config.yml"
+
+    - when: wg_easy_enabled | bool
+      ansible.builtin.include_tasks: "{{ role_path }}/tasks/install.yml"
+  tags:
+    - setup-all
+    - setup-wg-easy
+    - install-all
+    - install-wg-easy
+
+- block:
+    - when: not wg_easy_enabled | bool
+      ansible.builtin.include_tasks: "{{ role_path }}/tasks/uninstall.yml"
+  tags:
+    - setup-all
+    - setup-wg-easy
