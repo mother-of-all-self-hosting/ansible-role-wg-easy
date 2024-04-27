@@ -1,6 +1,6 @@
 ---
 
-# Project source code URL: https://github.com/WeeJeWel/wg-easy
+# Project source code URL: https://github.com/wg-easy/wg-easy
 
 wg_easy_enabled: true
 
@@ -9,7 +9,7 @@ wg_easy_identifier: wg-easy
 wg_easy_uid: ''
 wg_easy_gid: ''
 
-wg_easy_version: 7
+wg_easy_version: 12
 
 wg_easy_scheme: https
 
@@ -23,8 +23,8 @@ wg_easy_path_prefix: /
 wg_easy_base_path: "/{{ wg_easy_identifier }}"
 wg_easy_data_path: "{{ wg_easy_base_path }}/data"
 
-wg_easy_container_image: "{{ wg_easy_container_image_registry_prefix }}weejewel/wg-easy:{{ wg_easy_container_image_tag }}"
-wg_easy_container_image_registry_prefix: docker.io/
+wg_easy_container_image: "{{ wg_easy_container_image_registry_prefix }}wg-easy/wg-easy:{{ wg_easy_container_image_tag }}"
+wg_easy_container_image_registry_prefix: ghcr.io/
 wg_easy_container_image_tag: "{{ wg_easy_version }}"
 wg_easy_container_image_force_pull: "{{ wg_easy_container_image.endswith(':latest') }}"
 
