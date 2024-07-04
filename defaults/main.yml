@@ -120,9 +120,14 @@ wg_easy_environment_variables_additional_variable_password: ''
 wg_easy_environment_variables_additional_variable_wg_host: ''
 
 # Controls the `WG_PORT` environment variable.
-# The public UDP port of your VPN server.
-# WireGuard will always listen on 51820 inside the Docker container.
+# The UDP port that the container process listens on.
 wg_easy_environment_variables_additional_variable_wg_port: 51820
+
+# Controls the `WG_CONFIG_PORT` environment variable.
+# This specifies the public UDP port of your VPN server.
+# The value defined here will be used in generated WireGuard configuration profiles.
+# Inside the container, WireGuard listens on the port defined in `wg_easy_environment_variables_additional_variable_wg_port`.
+wg_easy_environment_variables_additional_variable_wg_config_port: 51820
 
 # Controls the `WG_DEFAULT_DNS` environment variable.
 # DNS server clients will use.
