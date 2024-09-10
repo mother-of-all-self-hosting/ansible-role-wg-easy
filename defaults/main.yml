@@ -9,7 +9,7 @@ wg_easy_identifier: wg-easy
 wg_easy_uid: ''
 wg_easy_gid: ''
 
-wg_easy_version: 13
+wg_easy_version: 14
 
 wg_easy_scheme: https
 
@@ -111,9 +111,15 @@ wg_easy_container_additional_volumes: []
 # A list of extra arguments to pass to the container
 wg_easy_container_extra_arguments: []
 
-# Controls the `PASSWORD` environment variable.
-# When set, requires a password when logging in to the Web UI.
+# When set, the password will be bcrypt-hashed (see `wg_easy_environment_variables_additional_variable_password_hash`).
+# This ultimately causes the web UI to require a password.
 wg_easy_environment_variables_additional_variable_password: ''
+
+# Controls the `PASSWORD_HASH` environment variable.
+# It must be set to a bcrypt-hashed password.
+# See: https://github.com/wg-easy/wg-easy/blob/master/How_to_generate_an_bcrypt_hash.md
+# Setting this causes the web UI to require a password.
+wg_easy_environment_variables_additional_variable_password_hash: "{{ wg_easy_environment_variables_additional_variable_password | password_hash('bcrypt') }}"
 
 # Controls the `WG_HOST` environment variable.
 # The public hostname of your VPN server.
