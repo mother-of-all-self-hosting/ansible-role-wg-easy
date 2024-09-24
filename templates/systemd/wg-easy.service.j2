@@ -13,6 +13,10 @@ Environment="HOME={{ devture_systemd_docker_base_systemd_unit_home_path }}"
 ExecStartPre=-{{ devture_systemd_docker_base_host_command_sh }} -c '{{ devture_systemd_docker_base_host_command_docker }} stop --time={{ devture_systemd_docker_base_container_stop_grace_time_seconds }} {{ wg_easy_identifier }} 2>/dev/null || true'
 ExecStartPre=-{{ devture_systemd_docker_base_host_command_sh }} -c '{{ devture_systemd_docker_base_host_command_docker }} rm {{ wg_easy_identifier }} 2>/dev/null || true'
 
+{% if wg_easy_systemd_modprobe_iptables_enabled %}
+ExecStartPre=-/usr/bin/env modprobe {{ wg_easy_systemd_modprobe_iptables_module_name }}
+{% endif %}
+
 ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} create \
 			--rm \
 			--name={{ wg_easy_identifier }} \
