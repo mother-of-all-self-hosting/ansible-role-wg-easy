@@ -1,5 +1,27 @@
 ---
 
+- name: (Deprecation) Catch and report renamed WireGuard Easy settings
+  ansible.builtin.fail:
+    msg: >-
+      Your configuration contains a variable, which now has a different name.
+      Please change your configuration to rename the variable (`{{ item.old }}` -> `{{ item.new }}`).
+  when: "item.old in vars"
+  with_items:
+    - {'old': 'wg_easy_environment_variables_additional_variable_wg_host', 'new': 'wg_easy_environment_variables_additional_variable_host'}
+    - {'old': 'wg_easy_environment_variables_additional_variable_wg_port', 'new': '<the WireGuard port is configured via the web UI; there is a new wg_easy_environment_variables_additional_variable_port variable, but it controls the in-container TCP port of the web UI, not the WireGuard port>'}
+    - {'old': 'wg_easy_environment_variables_additional_variable_wg_config_port', 'new': '<removed; no alternative>'}
+    - {'old': 'wg_easy_environment_variables_additional_variable_wg_default_dns', 'new': '<removed; see docs/services/wg-easy.md for a workaround>'}
+    - {'old': 'wg_easy_environment_variables_additional_variable_password', 'new': '<removed; no alternative; passwords are configured via the web UI now>'}
+    - {'old': 'wg_easy_environment_variables_additional_variable_password_hash', 'new': '<removed; no alternative; passwords are configured via the web UI now>'}
+
+- name: Fail if wg_easy_path_prefix is not '/'
+  ansible.builtin.fail:
+    msg: >-
+      WireGuard Easy v15+ does not support path prefixes other than '/'.
+      Your configuration has wg_easy_path_prefix set to '{{ wg_easy_path_prefix }}', but this will not work.
+      Please set wg_easy_path_prefix to '/' in your configuration.
+  when: "wg_easy_path_prefix != '/'"
+
 - name: Fail if required WireGuard Easy settings not defined
   ansible.builtin.fail:
     msg: >
@@ -12,7 +34,7 @@
     - wg_easy_hostname
     - wg_easy_path_prefix
     - wg_easy_container_network
-    - wg_easy_environment_variables_additional_variable_wg_host
+    - wg_easy_environment_variables_additional_variable_host
 
 - when: wg_easy_container_labels_traefik_enabled | bool
   block:

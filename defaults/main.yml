@@ -9,7 +9,7 @@ wg_easy_identifier: wg-easy
 wg_easy_uid: ''
 wg_easy_gid: ''
 
-wg_easy_version: 14
+wg_easy_version: 15.0.0-beta.4
 
 wg_easy_scheme: https
 
@@ -41,11 +41,15 @@ wg_easy_container_additional_networks_custom: []
 # Specifies how the container publishes its WireGuard port (51820/udp)
 #
 # Takes an "<ip>:<port>" value (e.g. "127.0.0.1:51820"), just a port number or an empty string to not expose.
+#
+# Inside the container, the WireGuard port is always 51820/udp.
 wg_easy_container_wireguard_bind_port: "51820"
 
 # Specifies how the container publishes its HTTP port (51821/tcp)
 #
 # Takes an "<ip>:<port>" value (e.g. "127.0.0.1:51821"), just a port number or an empty string to not expose.
+#
+# Also see: `wg_easy_environment_variables_additional_variable_port` for configuring the port inside the container.
 wg_easy_container_http_bind_port: ''
 
 # wg_easy_container_labels_traefik_enabled controls whether labels to assist a Traefik reverse-proxy will be attached to the container.
@@ -93,6 +97,17 @@ wg_easy_container_labels_traefik_additional_response_headers_custom: {}
 #   another.label="here"
 wg_easy_container_labels_additional_labels: ''
 
+# Specifies how often the container health-check will run.
+#
+# For Traefik based setups, it's important that the interval is short,
+# because the interval value also specifies the "initial wait time".
+# This is a Docker (moby) bug: https://github.com/moby/moby/issues/33410
+# Without a successful healthcheck, Traefik will not register the service for reverse-proxying.
+# Thus, the health interval determines the initial start-up time -- the smaller, the better.
+#
+# For non-Traefik setups, we use the default healthcheck interval (30s) to decrease overhead.
+wg_easy_container_health_interval: "{{ '5s' if wg_easy_container_labels_traefik_enabled else '30s' }}"
+
 # A list of additional "volumes" to mount in the container.
 #
 # See the `--mount` documentation for the `docker run` command.
@@ -111,33 +126,20 @@ wg_easy_container_additional_volumes: []
 # A list of extra arguments to pass to the container
 wg_easy_container_extra_arguments: []
 
-# When set, the password will be bcrypt-hashed (see `wg_easy_environment_variables_additional_variable_password_hash`).
-# This ultimately causes the web UI to require a password.
-wg_easy_environment_variables_additional_variable_password: ''
+# Controls the `HOST` environment variable.
+# The network interface to bind to when listening for incoming connections.
+#
+# Also see: `wg_easy_environment_variables_additional_variable_port`
+wg_easy_environment_variables_additional_variable_host: 0.0.0.0
 
-# Controls the `PASSWORD_HASH` environment variable.
-# It must be set to a bcrypt-hashed password.
-# See: https://github.com/wg-easy/wg-easy/blob/master/How_to_generate_an_bcrypt_hash.md
-# Setting this causes the web UI to require a password.
-wg_easy_environment_variables_additional_variable_password_hash: "{{ wg_easy_environment_variables_additional_variable_password | password_hash('bcrypt') }}"
+# Controls the `PORT` environment variable.
+# The TCP port that the container process listens on for providing its web UI.
+# Also see: `wg_easy_container_http_bind_port`
+wg_easy_environment_variables_additional_variable_port: 51821
 
-# Controls the `WG_HOST` environment variable.
-# The public hostname of your VPN server.
-wg_easy_environment_variables_additional_variable_wg_host: ''
-
-# Controls the `WG_PORT` environment variable.
-# The UDP port that the container process listens on.
-wg_easy_environment_variables_additional_variable_wg_port: 51820
-
-# Controls the `WG_CONFIG_PORT` environment variable.
-# This specifies the public UDP port of your VPN server.
-# The value defined here will be used in generated WireGuard configuration profiles.
-# Inside the container, WireGuard listens on the port defined in `wg_easy_environment_variables_additional_variable_wg_port`.
-wg_easy_environment_variables_additional_variable_wg_config_port: 51820
-
-# Controls the `WG_DEFAULT_DNS` environment variable.
-# DNS server clients will use.
-wg_easy_environment_variables_additional_variable_wg_default_dns: 1.1.1.1
+# Controls the `INSECURE` environment variable.
+# Set this to `true` if you'll be accessing via HTTP.
+wg_easy_environment_variables_additional_variable_insecure: false
 
 # Additional environment variables.
 wg_easy_environment_variables_additional_variables: ''

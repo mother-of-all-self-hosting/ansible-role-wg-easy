@@ -46,7 +46,7 @@ traefik.http.routers.{{ wg_easy_identifier }}.tls={{ wg_easy_container_labels_tr
 traefik.http.routers.{{ wg_easy_identifier }}.tls.certResolver={{ wg_easy_container_labels_traefik_tls_certResolver }}
 {% endif %}
 
-traefik.http.services.{{ wg_easy_identifier }}.loadbalancer.server.port=51821
+traefik.http.services.{{ wg_easy_identifier }}.loadbalancer.server.port={{ wg_easy_environment_variables_additional_variable_port}}
 {% endif %}
 
 {{ wg_easy_container_labels_additional_labels }}
