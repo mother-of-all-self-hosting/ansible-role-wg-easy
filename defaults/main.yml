@@ -9,7 +9,7 @@ wg_easy_identifier: wg-easy
 wg_easy_uid: ''
 wg_easy_gid: ''
 
-wg_easy_version: 15.0.0-beta.5
+wg_easy_version: 15.0.0-beta.7
 
 wg_easy_scheme: https
 

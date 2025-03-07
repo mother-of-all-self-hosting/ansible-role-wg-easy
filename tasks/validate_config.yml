@@ -10,7 +10,7 @@
     - {'old': 'wg_easy_environment_variables_additional_variable_wg_host', 'new': 'wg_easy_environment_variables_additional_variable_host'}
     - {'old': 'wg_easy_environment_variables_additional_variable_wg_port', 'new': '<the WireGuard port is configured via the web UI; there is a new wg_easy_environment_variables_additional_variable_port variable, but it controls the in-container TCP port of the web UI, not the WireGuard port>'}
     - {'old': 'wg_easy_environment_variables_additional_variable_wg_config_port', 'new': '<removed; no alternative>'}
-    - {'old': 'wg_easy_environment_variables_additional_variable_wg_default_dns', 'new': '<removed; see docs/services/wg-easy.md for a workaround>'}
+    - {'old': 'wg_easy_environment_variables_additional_variable_wg_default_dns', 'new': '<removed; configurable via the web UI after setup; see docs/services/wg-easy.md for details>'}
     - {'old': 'wg_easy_environment_variables_additional_variable_password', 'new': '<removed; no alternative; passwords are configured via the web UI now>'}
     - {'old': 'wg_easy_environment_variables_additional_variable_password_hash', 'new': '<removed; no alternative; passwords are configured via the web UI now>'}
 
