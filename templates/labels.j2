@@ -13,11 +13,6 @@ traefik.http.middlewares.{{ wg_easy_identifier }}-slashless-redirect.redirectreg
 {% set middlewares = middlewares + [wg_easy_identifier + '-slashless-redirect'] %}
 {% endif %}
 
-{% if wg_easy_container_labels_traefik_path_prefix != '/' %}
-traefik.http.middlewares.{{ wg_easy_identifier }}-strip-prefix.stripprefix.prefixes={{ wg_easy_container_labels_traefik_path_prefix }}
-{% set middlewares = middlewares + [wg_easy_identifier + '-strip-prefix'] %}
-{% endif %}
-
 {% if wg_easy_container_labels_traefik_additional_request_headers.keys() | length > 0 %}
 {% for name, value in wg_easy_container_labels_traefik_additional_request_headers.items() %}
 traefik.http.middlewares.{{ wg_easy_identifier }}-add-request-headers.headers.customrequestheaders.{{ name }}={{ value }}

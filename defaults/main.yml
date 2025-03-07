@@ -141,6 +141,10 @@ wg_easy_environment_variables_additional_variable_port: 51821
 # Set this to `true` if you'll be accessing via HTTP.
 wg_easy_environment_variables_additional_variable_insecure: false
 
+# Controls the `NUXT_APP_BASE_URL` environment variable.
+# The base URL of the Nuxt.js application.
+wg_easy_environment_variables_additional_variable_nuxt_app_base_url: "{{ wg_easy_path_prefix }}"
+
 # Additional environment variables.
 wg_easy_environment_variables_additional_variables: ''
 

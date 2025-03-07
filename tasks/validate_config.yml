@@ -14,14 +14,6 @@
     - {'old': 'wg_easy_environment_variables_additional_variable_password', 'new': '<removed; no alternative; passwords are configured via the web UI now>'}
     - {'old': 'wg_easy_environment_variables_additional_variable_password_hash', 'new': '<removed; no alternative; passwords are configured via the web UI now>'}
 
-- name: Fail if wg_easy_path_prefix is not '/'
-  ansible.builtin.fail:
-    msg: >-
-      WireGuard Easy v15+ does not support path prefixes other than '/'.
-      Your configuration has wg_easy_path_prefix set to '{{ wg_easy_path_prefix }}', but this will not work.
-      Please set wg_easy_path_prefix to '/' in your configuration.
-  when: "wg_easy_path_prefix != '/'"
-
 - name: Fail if required WireGuard Easy settings not defined
   ansible.builtin.fail:
     msg: >
