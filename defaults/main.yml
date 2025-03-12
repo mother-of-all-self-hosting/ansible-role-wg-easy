@@ -45,9 +45,9 @@ wg_easy_container_additional_networks_custom: []
 # Inside the container, the WireGuard port is always 51820/udp.
 wg_easy_container_wireguard_bind_port: "51820"
 
-# Specifies how the container publishes its HTTP port (51821/tcp)
+# Specifies how the container publishes its HTTP port (8080/tcp)
 #
-# Takes an "<ip>:<port>" value (e.g. "127.0.0.1:51821"), just a port number or an empty string to not expose.
+# Takes an "<ip>:<port>" value (e.g. "127.0.0.1:8080"), just a port number or an empty string to not expose.
 #
 # Also see: `wg_easy_environment_variables_additional_variable_port` for configuring the port inside the container.
 wg_easy_container_http_bind_port: ''
@@ -135,7 +135,7 @@ wg_easy_environment_variables_additional_variable_host: 0.0.0.0
 # Controls the `PORT` environment variable.
 # The TCP port that the container process listens on for providing its web UI.
 # Also see: `wg_easy_container_http_bind_port`
-wg_easy_environment_variables_additional_variable_port: 51821
+wg_easy_environment_variables_additional_variable_port: 8080
 
 # Controls the `INSECURE` environment variable.
 # Set this to `true` if you'll be accessing via HTTP.
