@@ -24,7 +24,9 @@ wg_easy_base_path: "/{{ wg_easy_identifier }}"
 wg_easy_data_path: "{{ wg_easy_base_path }}/data"
 
 wg_easy_container_image: "{{ wg_easy_container_image_registry_prefix }}wg-easy/wg-easy:{{ wg_easy_container_image_tag }}"
-wg_easy_container_image_registry_prefix: ghcr.io/
+wg_easy_container_image_registry_prefix: "{{ wg_easy_container_image_registry_prefix_upstream }}"
+wg_easy_container_image_registry_prefix_upstream: "{{ wg_easy_container_image_registry_prefix_upstream_default }}"
+wg_easy_container_image_registry_prefix_upstream_default: ghcr.io/
 wg_easy_container_image_tag: "{{ wg_easy_version }}"
 wg_easy_container_image_force_pull: "{{ wg_easy_container_image.endswith(':latest') }}"
 
