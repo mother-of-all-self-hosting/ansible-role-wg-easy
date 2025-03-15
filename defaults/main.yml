@@ -38,18 +38,14 @@ wg_easy_container_additional_networks: "{{ wg_easy_container_additional_networks
 wg_easy_container_additional_networks_auto: []
 wg_easy_container_additional_networks_custom: []
 
-# Specifies how the container publishes its WireGuard port (51820/udp)
+# Specifies how the container publishes its WireGuard port (e.g. 51820/udp)
 #
 # Takes an "<ip>:<port>" value (e.g. "127.0.0.1:51820"), just a port number or an empty string to not expose.
 #
-# Inside the container, the WireGuard port is always 51820/udp.
-#
 # Also see `wg_easy_environment_variables_additional_variable_init_port`.
-# Note that regardless of the value of `wg_easy_environment_variables_additional_variable_init_port`,
-# the WireGuard port in the container is always `51820/udp`, so that's the port that we're actually exposing.
 wg_easy_container_wireguard_bind_port: "{{ wg_easy_environment_variables_additional_variable_init_port }}"
 
-# Specifies how the container publishes its HTTP port (8080/tcp)
+# Specifies how the container publishes its HTTP port (e.g. 8080/tcp)
 #
 # Takes an "<ip>:<port>" value (e.g. "127.0.0.1:8080"), just a port number or an empty string to not expose.
 #
@@ -149,8 +145,9 @@ wg_easy_environment_variables_additional_variable_init_host: "{{ wg_easy_hostnam
 
 # Controls the `INIT_PORT` environment variable, affecting the initial unattended setup.
 # This specifies the port that clients need to use to connect to the WireGuard server.
-# Regardless of the value of this variable, the WireGuard port in the container is always `51820/udp`.
-# Changing this subsequently won't have any effect.
+# Also points to the port actually used in the container (in case you've reconfigured it via the web UI).
+# Changing this subsequently won't have any effect on reconfiguring wg-easy itself,
+# but may still be useful to do to let the rest of the Ansible role know what the actual port is.
 wg_easy_environment_variables_additional_variable_init_port: 51820
 
 # Controls the `INIT_USERNAME` environment variable, affecting the initial unattended setup.
