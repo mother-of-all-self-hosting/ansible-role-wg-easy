@@ -46,8 +46,8 @@ wg_easy_container_additional_networks_custom: []
 #
 # Also see `wg_easy_environment_variables_additional_variable_init_port`.
 # Note that regardless of the value of `wg_easy_environment_variables_additional_variable_init_port`,
-# the WireGuard port in the container is always `51820/udp`, so that's the port we need to expose.
-wg_easy_container_wireguard_bind_port: 51820
+# the WireGuard port in the container is always `51820/udp`, so that's the port that we're actually exposing.
+wg_easy_container_wireguard_bind_port: "{{ wg_easy_environment_variables_additional_variable_init_port }}"
 
 # Specifies how the container publishes its HTTP port (8080/tcp)
 #
