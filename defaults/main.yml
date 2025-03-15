@@ -9,7 +9,7 @@ wg_easy_identifier: wg-easy
 wg_easy_uid: ''
 wg_easy_gid: ''
 
-wg_easy_version: 15.0.0-beta.8
+wg_easy_version: 15.0.0-beta.10
 
 wg_easy_scheme: https
 
@@ -43,7 +43,11 @@ wg_easy_container_additional_networks_custom: []
 # Takes an "<ip>:<port>" value (e.g. "127.0.0.1:51820"), just a port number or an empty string to not expose.
 #
 # Inside the container, the WireGuard port is always 51820/udp.
-wg_easy_container_wireguard_bind_port: "51820"
+#
+# Also see `wg_easy_environment_variables_additional_variable_init_port`.
+# Note that regardless of the value of `wg_easy_environment_variables_additional_variable_init_port`,
+# the WireGuard port in the container is always `51820/udp`, so that's the port we need to expose.
+wg_easy_container_wireguard_bind_port: 51820
 
 # Specifies how the container publishes its HTTP port (8080/tcp)
 #
@@ -126,6 +130,71 @@ wg_easy_container_additional_volumes: []
 # A list of extra arguments to pass to the container
 wg_easy_container_extra_arguments: []
 
+# Controls the `INIT_ENABLED` environment variable.
+# Whether to enable the unattended setup logic.
+# Without this, one needs to go through a manual setup step via the web UI.
+wg_easy_environment_variables_additional_variable_init_enabled: true
+
+# Controls the `INIT_HOST` environment variable, affecting the initial unattended setup.
+# This specifies the hostname that clients need to use to connect to the WireGuard server.
+# This value will ultimately end up in the `Peer.Endpoint` field of the WireGuard client configuration file.
+#
+# This may be an IPv4/IPv6 address or a hostname.
+#
+# If a hostname is used, it's recommended to configure both `A` and `AAAA` DNS records for it,
+# so that it's reachable via both IPv4 and IPv6.
+#
+# Changing this subsequently won't have any effect.
+wg_easy_environment_variables_additional_variable_init_host: "{{ wg_easy_hostname }}"
+
+# Controls the `INIT_PORT` environment variable, affecting the initial unattended setup.
+# This specifies the port that clients need to use to connect to the WireGuard server.
+# Regardless of the value of this variable, the WireGuard port in the container is always `51820/udp`.
+# Changing this subsequently won't have any effect.
+wg_easy_environment_variables_additional_variable_init_port: 51820
+
+# Controls the `INIT_USERNAME` environment variable, affecting the initial unattended setup.
+# The admin username for accessing the web UI.
+# Changing this subsequently won't have any effect.
+wg_easy_environment_variables_additional_variable_init_username: ""
+
+# Controls the `INIT_PASSWORD` environment variable, affecting the initial unattended setup.
+# The admin password for accessing the web UI.
+# Changing this subsequently won't have any effect.
+wg_easy_environment_variables_additional_variable_init_password: ""
+
+# Controls the `INIT_DNS` environment variable, affecting the initial unattended setup.
+# This specifies the DNS server(s) that clients will be pointed to.
+# This value will ultimately end up in the `Interface.DNS` field of the WireGuard client configuration file.
+#
+# Changing this subsequently won't have any effect.
+wg_easy_environment_variables_additional_variable_init_dns: "1.1.1.1,2606:4700:4700::1111"
+
+# Controls the `INIT_IPV4_CIDR` environment variable, affecting the initial unattended setup.
+# This specifies the IPv4 CIDR from which clients will be assigned their IPv4 addresses.
+# Changing this subsequently won't have any effect.
+wg_easy_environment_variables_additional_variable_init_ipv4_cidr: "10.8.0.0/24"
+
+# Controls the `INIT_IPV6_CIDR` environment variable, affecting the initial unattended setup.
+# This specifies the IPv6 CIDR from which clients will be assigned their IPv6 addresses.
+#
+# By default, most operating systems will prefer using IPv4 instead of IPv6 when making outgoing connections when their network interface is configured with a ULA.
+# To get outgoing IPv6 working, you need to configure the network interface with a Global Unicast Address (GUA) that you own,
+# or a GUA-like address - like the documentation-reserved prefix (`2001:db8::/32`).
+#
+# The default value here is a Global Unicast Address (GUA), which goes against the upstream defaults of wg-easy,
+# which use Unique Local Address (ULA) value of `fdcc:ad94:bacf:61a4::cafe:0/112`.
+# We do this, so that outgoing IPv6 connections will be preferred over IPv4 out of the box.
+#
+# If you can use your own GUA address here, we recommend doing that.
+# For example, if you get `2001:555:5555:5555:/64` from your ISP for your network,
+# you could assign something like `2001:555:5555:5555::0:cafe:0/112` for your 1st (`0`-th) wg-easy instance.
+# If you run more wg-easy instances in your network, you could use `2001:555:5555:5555::1:cafe:0/112`,
+# `2001:555:5555:5555::2:cafe:0/112`, etc. for them, so that they all have unique subnets.
+#
+# Changing this subsequently won't have any effect.
+wg_easy_environment_variables_additional_variable_init_ipv6_cidr: "2001:db8::/32"
+
 # Controls the `HOST` environment variable.
 # The network interface to bind to when listening for incoming connections.
 #
@@ -139,7 +208,7 @@ wg_easy_environment_variables_additional_variable_port: 8080
 
 # Controls the `INSECURE` environment variable.
 # Set this to `true` if you'll be accessing via HTTP.
-wg_easy_environment_variables_additional_variable_insecure: false
+wg_easy_environment_variables_additional_variable_insecure: "{{ wg_easy_container_labels_traefik_enabled and not wg_easy_container_labels_traefik_tls}}"
 
 # Controls the `NUXT_APP_BASE_URL` environment variable.
 # The base URL of the Nuxt.js application.
