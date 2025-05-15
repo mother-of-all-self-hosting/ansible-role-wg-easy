@@ -9,6 +9,7 @@ wg_easy_identifier: wg-easy
 wg_easy_uid: ''
 wg_easy_gid: ''
 
+# renovate: datasource=docker depName=ghcr.io/wg-easy/wg-easy
 wg_easy_version: 15.0.0-beta.12
 
 wg_easy_scheme: https
