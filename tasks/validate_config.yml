@@ -11,6 +11,9 @@
       Please change your configuration to rename the variable (`{{ item.old }}` -> `{{ item.new }}`).
   when: "item.old in vars"
   with_items:
+    - {'old': 'wg_easy_systemd_required_systemd_services_list_default', 'new': 'wg_easy_systemd_required_services_list_default'}
+    - {'old': 'wg_easy_systemd_required_systemd_services_list_auto', 'new': 'wg_easy_systemd_required_services_list_auto'}
+    - {'old': 'wg_easy_systemd_required_systemd_services_list_custom', 'new': 'wg_easy_systemd_required_services_list_custom'}
     - {'old': 'wg_easy_environment_variables_additional_variable_wg_host', 'new': 'wg_easy_environment_variables_additional_variable_host'}
     - {'old': 'wg_easy_environment_variables_additional_variable_wg_port', 'new': 'wg_easy_environment_variables_additional_variable_init_port'}
     - {'old': 'wg_easy_environment_variables_additional_variable_wg_config_port', 'new': '<removed; no alternative>'}
