@@ -55,7 +55,7 @@
     driver: bridge
     driver_options: "{{ devture_systemd_docker_base_container_networks_driver_options }}"
 
-- name: Ensure WireGuard Easy container network exists via command
+- name: Ensure WireGuard Easy container network is created via command
   when: devture_systemd_docker_base_container_network_creation_method == 'command'
   ansible.builtin.command:
     cmd: "{{ devture_systemd_docker_base_host_command_docker }} network create {{ '--ipv6' if devture_systemd_docker_base_ipv6_enabled else '' }} {{ wg_easy_container_network }}"
