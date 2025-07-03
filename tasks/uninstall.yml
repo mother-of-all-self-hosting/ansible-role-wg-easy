@@ -3,13 +3,13 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 ---
-
 - name: Check existence of WireGuard Easy systemd service
   ansible.builtin.stat:
     path: "{{ devture_systemd_docker_base_systemd_path }}/{{ wg_easy_identifier }}.service"
   register: wg_easy_service_stat
 
-- when: wg_easy_service_stat.stat.exists | bool
+- name: Uninstall WireGuard Easy systemd services and files
+  when: wg_easy_service_stat.stat.exists | bool
   block:
     - name: Ensure WireGuard Easy systemd service is stopped
       ansible.builtin.service:

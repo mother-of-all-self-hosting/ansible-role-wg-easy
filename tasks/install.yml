@@ -3,12 +3,11 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 ---
-
 - name: Ensure WireGuard Easy paths exist
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
-    mode: 0750
+    mode: "0750"
     owner: "{{ wg_easy_uid }}"
     group: "{{ wg_easy_gid }}"
   with_items:
@@ -19,7 +18,7 @@
   ansible.builtin.template:
     src: "{{ role_path }}/templates/{{ item }}.j2"
     dest: "{{ wg_easy_base_path }}/{{ item }}"
-    mode: 0640
+    mode: "0640"
     owner: "{{ wg_easy_uid }}"
     group: "{{ wg_easy_gid }}"
   with_items:
@@ -72,4 +71,4 @@
   ansible.builtin.template:
     src: "{{ role_path }}/templates/systemd/wg-easy.service.j2"
     dest: "{{ devture_systemd_docker_base_systemd_path }}/{{ wg_easy_identifier }}.service"
-    mode: 0644
+    mode: "0644"

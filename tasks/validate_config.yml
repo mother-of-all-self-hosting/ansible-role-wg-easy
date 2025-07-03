@@ -3,7 +3,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 ---
-
 - name: (Deprecation) Catch and report renamed settings
   ansible.builtin.fail:
     msg: >-
@@ -11,15 +10,17 @@
       Please change your configuration to rename the variable (`{{ item.old }}` -> `{{ item.new }}`).
   when: "item.old in vars"
   with_items:
-    - {'old': 'wg_easy_systemd_required_systemd_services_list_default', 'new': 'wg_easy_systemd_required_services_list_default'}
-    - {'old': 'wg_easy_systemd_required_systemd_services_list_auto', 'new': 'wg_easy_systemd_required_services_list_auto'}
-    - {'old': 'wg_easy_systemd_required_systemd_services_list_custom', 'new': 'wg_easy_systemd_required_services_list_custom'}
-    - {'old': 'wg_easy_environment_variables_additional_variable_wg_host', 'new': 'wg_easy_environment_variables_additional_variable_host'}
-    - {'old': 'wg_easy_environment_variables_additional_variable_wg_port', 'new': 'wg_easy_environment_variables_additional_variable_init_port'}
-    - {'old': 'wg_easy_environment_variables_additional_variable_wg_config_port', 'new': '<removed; no alternative>'}
-    - {'old': 'wg_easy_environment_variables_additional_variable_wg_default_dns', 'new': '<removed; configurable via the web UI after setup; see docs/services/wg-easy.md for details>'}
-    - {'old': 'wg_easy_environment_variables_additional_variable_password', 'new': 'wg_easy_environment_variables_additional_variable_init_password'}
-    - {'old': 'wg_easy_environment_variables_additional_variable_password_hash', 'new': '<removed; no alternative, but wg_easy_environment_variables_additional_variable_init_password is similar>'}
+    - { "old": "wg_easy_systemd_required_systemd_services_list_default", "new": "wg_easy_systemd_required_services_list_default" }
+    - { "old": "wg_easy_systemd_required_systemd_services_list_auto", "new": "wg_easy_systemd_required_services_list_auto" }
+    - { "old": "wg_easy_systemd_required_systemd_services_list_custom", "new": "wg_easy_systemd_required_services_list_custom" }
+    - { "old": "wg_easy_environment_variables_additional_variable_wg_host", "new": "wg_easy_environment_variables_additional_variable_host" }
+    - { "old": "wg_easy_environment_variables_additional_variable_wg_port", "new": "wg_easy_environment_variables_additional_variable_init_port" }
+    - { "old": "wg_easy_environment_variables_additional_variable_wg_config_port", "new": "<removed; no alternative>" }
+    - "old": "wg_easy_environment_variables_additional_variable_wg_default_dns"
+      "new": "<removed; configurable via the web UI after setup; see docs/services/wg-easy.md for details>"
+    - { "old": "wg_easy_environment_variables_additional_variable_password", "new": "wg_easy_environment_variables_additional_variable_init_password" }
+    - "old": "wg_easy_environment_variables_additional_variable_password_hash"
+      "new": "<removed; no alternative, but wg_easy_environment_variables_additional_variable_init_password is similar>"
 
 - name: Fail if wg_easy_path_prefix is not '/'
   ansible.builtin.fail:
@@ -43,7 +44,8 @@
     - wg_easy_container_network
     - wg_easy_environment_variables_additional_variable_host
 
-- when: wg_easy_container_labels_traefik_enabled | bool
+- name: Run if Traefik is enabled
+  when: wg_easy_container_labels_traefik_enabled | bool
   block:
     - name: Fail if required WireGuard Easy Traefik settings not defined
       ansible.builtin.fail:
