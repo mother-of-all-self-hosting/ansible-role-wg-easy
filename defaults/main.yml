@@ -244,6 +244,10 @@ wg_easy_environment_variables_additional_variable_init_dns: "1.1.1.1,2606:4700:4
 # Changing this subsequently won't have any effect.
 wg_easy_environment_variables_additional_variable_init_ipv4_cidr: "10.8.0.0/24"
 
+# Controls the `DISABLE_IPV6` environment variable, affecting whether IPv6 support should be disabled.
+# Disabling IPv6 will disable the creation of the default IPv6 firewall rules and won't add IPv6 address to the interface and clients.
+wg_easy_environment_variables_additional_variable_disable_ipv6: false
+
 # Controls the `INIT_IPV6_CIDR` environment variable, affecting the initial unattended setup.
 # This specifies the IPv6 CIDR from which clients will be assigned their IPv6 addresses.
 #
