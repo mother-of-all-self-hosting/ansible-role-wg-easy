@@ -198,6 +198,11 @@ wg_easy_systemd_wanted_services_list: []
 wg_easy_systemd_modprobe_iptables_enabled: "{{ ansible_os_family == 'RedHat' }}"
 wg_easy_systemd_modprobe_iptables_module_name: ip_tables
 
+# Controls whether the `ip6_tables` module is modprobed before starting the wg-easy container.
+# This may be necessary on certain systems.
+wg_easy_systemd_modprobe_ip6tables_enabled: false
+wg_easy_systemd_modprobe_ip6tables_module_name: ip6_tables
+
 # Controls the `INIT_ENABLED` environment variable.
 # Whether to enable the unattended setup logic.
 # Without this, one needs to go through a manual setup step via the web UI.

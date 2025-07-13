@@ -25,6 +25,10 @@ ExecStartPre=-{{ devture_systemd_docker_base_host_command_sh }} -c '{{ devture_s
 ExecStartPre=-/usr/bin/env modprobe {{ wg_easy_systemd_modprobe_iptables_module_name }}
 {% endif %}
 
+{% if wg_easy_systemd_modprobe_ip6tables_enabled %}
+ExecStartPre=-/usr/bin/env modprobe {{ wg_easy_systemd_modprobe_ip6tables_module_name }}
+{% endif %}
+
 ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} create \
       --rm \
       --name={{ wg_easy_identifier }} \
