@@ -94,7 +94,7 @@ wg_easy_container_labels_traefik_tls: "{{ wg_easy_container_labels_traefik_entry
 wg_easy_container_labels_traefik_tls_certResolver: default  # noqa var-naming
 
 # Controls which additional headers to attach to all HTTP requests.
-# To add your own custom request headers, use `wg_easy_container_labels_traefik_additional_response_headers_custom`
+# To add your own custom request headers, use `wg_easy_container_labels_traefik_additional_request_headers_custom`
 wg_easy_container_labels_traefik_additional_request_headers: "{{ wg_easy_container_labels_traefik_additional_request_headers_auto | combine(wg_easy_container_labels_traefik_additional_request_headers_custom) }}"
 wg_easy_container_labels_traefik_additional_request_headers_auto: {}
 wg_easy_container_labels_traefik_additional_request_headers_custom: {}
