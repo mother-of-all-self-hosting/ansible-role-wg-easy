@@ -47,7 +47,7 @@
 - name: Run if Traefik is enabled
   when: wg_easy_container_labels_traefik_enabled | bool
   block:
-    - name: Fail if required WireGuard Easy Traefik settings not defined
+    - name: Fail if Traefik settings required for WireGuard Easy are not defined
       ansible.builtin.fail:
         msg: >-
           You need to define a required configuration setting (`{{ item }}`).
