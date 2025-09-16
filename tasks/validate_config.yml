@@ -21,6 +21,7 @@
     - { "old": "wg_easy_environment_variables_additional_variable_password", "new": "wg_easy_environment_variables_additional_variable_init_password" }
     - "old": "wg_easy_environment_variables_additional_variable_password_hash"
       "new": "<removed; no alternative, but wg_easy_environment_variables_additional_variable_init_password is similar>"
+    - { "old": "wg_easy_http_header_content_permission_policy", "new": "wg_easy_http_header_permissions_policy" }
 
 - name: Fail if wg_easy_path_prefix is not '/'
   ansible.builtin.fail:
