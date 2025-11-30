@@ -190,7 +190,7 @@ wg_easy_systemd_wanted_services_list_custom: []
 # Controls whether the `ip_tables` module is modprobed before starting the wg-easy container.
 # This may be necessary on RedHat-based systems.
 # See: https://github.com/wg-easy/wg-easy/issues/827#issuecomment-1936047794
-wg_easy_systemd_modprobe_iptables_enabled: "{{ ansible_os_family == 'RedHat' }}"
+wg_easy_systemd_modprobe_iptables_enabled: "{{ ansible_facts['os_family'] == 'RedHat' }}"
 wg_easy_systemd_modprobe_iptables_module_name: ip_tables
 
 # Controls whether the `ip6_tables` module is modprobed before starting the wg-easy container.
