@@ -18,13 +18,13 @@ wg_easy_data_path: "{{ wg_easy_base_path }}/data"
 # renovate: datasource=docker depName=ghcr.io/wg-easy/wg-easy
 wg_easy_version: 15.1.0
 
-wg_easy_uid: ''
-wg_easy_gid: ''
+wg_easy_uid: ""
+wg_easy_gid: ""
 
 wg_easy_scheme: https
 
 # The hostname at which wg-easy is served.
-wg_easy_hostname: ''
+wg_easy_hostname: ""
 
 # The path at which wg-easy is served.
 # This value must either be `/` or not end with a slash (e.g. `/wg-easy`).
@@ -49,7 +49,7 @@ wg_easy_container_wireguard_bind_port: "{{ wg_easy_environment_variables_additio
 # Takes an "<ip>:<port>" value (e.g. "127.0.0.1:8080"), just a port number or an empty string to not expose.
 #
 # Also see: `wg_easy_environment_variables_additional_variable_port` for configuring the port inside the container.
-wg_easy_container_http_bind_port: ''
+wg_easy_container_http_bind_port: ""
 
 # The base container network. It will be auto-created by this role if it doesn't exist already.
 wg_easy_container_network: "{{ wg_easy_identifier }}"
@@ -296,4 +296,4 @@ wg_easy_environment_variables_additional_variable_insecure: "{{ wg_easy_containe
 wg_easy_environment_variables_additional_variable_nuxt_app_base_url: "{{ wg_easy_path_prefix }}"
 
 # Additional environment variables.
-wg_easy_environment_variables_additional_variables: ''
+wg_easy_environment_variables_additional_variables: ""
