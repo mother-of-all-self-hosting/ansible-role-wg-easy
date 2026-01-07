@@ -50,4 +50,6 @@ traefik.http.routers.{{ wg_easy_identifier }}.tls.certResolver={{ wg_easy_contai
 traefik.http.services.{{ wg_easy_identifier }}.loadbalancer.server.port={{ wg_easy_environment_variables_additional_variable_port}}
 {% endif %}
 
-{{ wg_easy_container_labels_additional_labels }}
+{% for arg in wg_easy_container_labels_additional_labels %}
+{{ arg }}
+{% endfor %}
