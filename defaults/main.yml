@@ -16,7 +16,7 @@ wg_easy_base_path: "/{{ wg_easy_identifier }}"
 wg_easy_data_path: "{{ wg_easy_base_path }}/data"
 
 # renovate: datasource=docker depName=ghcr.io/wg-easy/wg-easy
-wg_easy_version: 15.1.0
+wg_easy_version: 15.2.0
 
 wg_easy_uid: ""
 wg_easy_gid: ""
@@ -251,6 +251,12 @@ wg_easy_environment_variables_additional_variable_init_dns: "1.1.1.1,2606:4700:4
 # This specifies the IPv4 CIDR from which clients will be assigned their IPv4 addresses.
 # Changing this subsequently won't have any effect.
 wg_easy_environment_variables_additional_variable_init_ipv4_cidr: "10.8.0.0/24"
+
+# Controls the `INIT_ALLOWED_IPS` environment variable, affecting the initial unattended setup.
+# Sets global Allowed IPs.
+# Example value: `10.8.0.0/24,2001:0DB8::/32`
+# Changing this subsequently won't have any effect.
+wg_easy_environment_variables_additional_variable_init_allowed_ips: ""
 
 # Controls the `DISABLE_IPV6` environment variable, affecting whether IPv6 support should be disabled.
 # Disabling IPv6 will disable the creation of the default IPv6 firewall rules and won't add IPv6 address to the interface and clients.
