@@ -21,6 +21,7 @@ wg_easy_version: 15.2.1
 wg_easy_uid: ""
 wg_easy_gid: ""
 
+# The scheme used for serving wg-easy.
 wg_easy_scheme: https
 
 # The hostname at which wg-easy is served.
