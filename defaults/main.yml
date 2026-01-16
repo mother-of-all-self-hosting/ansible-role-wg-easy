@@ -129,6 +129,9 @@ wg_easy_container_labels_additional_labels_custom: []
 # For non-Traefik setups, we use the default healthcheck interval (30s) to decrease overhead.
 wg_easy_container_health_interval: "{{ '5s' if wg_easy_container_labels_traefik_enabled else '30s' }}"
 
+# Specify the size of the container's tmpfs volume
+wg_easy_container_tmpfs_run_size: 128m
+
 # A list of extra arguments to pass to the container (`docker create` command)
 wg_easy_container_extra_arguments: "{{ wg_easy_container_extra_arguments_auto + wg_easy_container_extra_arguments_custom }}"
 wg_easy_container_extra_arguments_auto: []
