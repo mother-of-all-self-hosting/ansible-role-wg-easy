@@ -50,11 +50,11 @@ ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} create \
       --env-file={{ wg_easy_base_path }}/env \
       --label-file={{ wg_easy_base_path }}/labels \
       --health-interval={{ wg_easy_container_health_interval }} \
-      --tmpfs=/run:rw,noexec,nosuid,size=100m \
       --mount type=bind,src={{ wg_easy_data_path }},dst=/etc/wireguard \
       {% for volume in wg_easy_container_additional_volumes %}
       --mount type={{ volume.type | default('bind' if '/' in volume.src else 'volume') }},src={{ volume.src }},dst={{ volume.dst }}{{ (',' + volume.options) if volume.options | default('') else '' }} \
       {% endfor %}
+      --tmpfs=/run:rw,noexec,nosuid,size=100m \
       --sysctl="net.ipv4.conf.all.src_valid_mark=1" \
       --sysctl="net.ipv4.ip_forward=1" \
       --sysctl="net.ipv6.conf.all.disable_ipv6=0" \
