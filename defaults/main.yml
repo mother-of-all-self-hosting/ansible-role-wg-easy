@@ -41,18 +41,14 @@ wg_easy_container_image_force_pull: "{{ wg_easy_container_image.endswith(':lates
 # The base container network. It will be auto-created by this role if it doesn't exist already.
 wg_easy_container_network: "{{ wg_easy_identifier }}"
 
-# Specifies how the container publishes its WireGuard port (e.g. 51820/udp)
+# Specify how the container publishes its WireGuard port (as defined by `wg_easy_environment_variables_additional_variable_init_port`).
 #
-# Takes an "<ip>:<port>" value (e.g. "127.0.0.1:51820"), just a port number or an empty string to not expose.
-#
-# Also see `wg_easy_environment_variables_additional_variable_init_port`.
+# Takes an "<ip>:<port>" or "<port>" value (e.g. "127.0.0.1:51820"), just a port number or an empty string to not expose.
 wg_easy_container_wireguard_bind_port: "{{ wg_easy_environment_variables_additional_variable_init_port }}"
 
-# Specifies how the container publishes its HTTP port (e.g. 8080/tcp)
+# Specify how the container publishes its HTTP port (as defined by `wg_easy_environment_variables_additional_variable_port`)
 #
-# Takes an "<ip>:<port>" value (e.g. "127.0.0.1:8080"), just a port number or an empty string to not expose.
-#
-# Also see: `wg_easy_environment_variables_additional_variable_port` for configuring the port inside the container.
+# Takes an "<ip>:<port>" or "<port>" value (e.g. "127.0.0.1:8080"), just a port number or an empty string to not expose.
 wg_easy_container_http_bind_port: ""
 
 # A list of additional container networks that the container would be connected to.
