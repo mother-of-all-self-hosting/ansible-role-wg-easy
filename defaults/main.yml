@@ -38,6 +38,9 @@ wg_easy_container_image_registry_prefix_upstream_default: ghcr.io/
 wg_easy_container_image_tag: "{{ wg_easy_version }}"
 wg_easy_container_image_force_pull: "{{ wg_easy_container_image.endswith(':latest') }}"
 
+# The base container network. It will be auto-created by this role if it doesn't exist already.
+wg_easy_container_network: "{{ wg_easy_identifier }}"
+
 # Specifies how the container publishes its WireGuard port (e.g. 51820/udp)
 #
 # Takes an "<ip>:<port>" value (e.g. "127.0.0.1:51820"), just a port number or an empty string to not expose.
@@ -51,9 +54,6 @@ wg_easy_container_wireguard_bind_port: "{{ wg_easy_environment_variables_additio
 #
 # Also see: `wg_easy_environment_variables_additional_variable_port` for configuring the port inside the container.
 wg_easy_container_http_bind_port: ""
-
-# The base container network. It will be auto-created by this role if it doesn't exist already.
-wg_easy_container_network: "{{ wg_easy_identifier }}"
 
 # A list of additional container networks that the container would be connected to.
 # The role does not create these networks, so make sure they already exist.
