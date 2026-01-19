@@ -34,11 +34,11 @@ ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} create \
       --name={{ wg_easy_identifier }} \
       --log-driver=none \
       --cap-drop=ALL \
+      --cap-add=DAC_OVERRIDE \
+      --cap-add=FOWNER \
       --cap-add=NET_ADMIN \
       --cap-add=NET_RAW \
       --cap-add=SYS_MODULE \
-      --cap-add=FOWNER \
-      --cap-add=DAC_OVERRIDE \
       --read-only \
       --network={{ wg_easy_container_network }} \
       {% if wg_easy_container_wireguard_bind_port %}
