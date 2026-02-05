@@ -65,11 +65,20 @@ ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} create \
       {% endfor %}
       {{ wg_easy_container_image }}
 
-{% for network in wg_easy_container_additional_networks %}
-ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} network connect {{ network }} {{ wg_easy_identifier }}
-{% endfor %}
-
 ExecStart={{ devture_systemd_docker_base_host_command_docker }} start --attach {{ wg_easy_identifier }}
+
+{#
+  Additional networks are connected after the container starts (not before) to ensure
+  the primary network (--network) is always assigned as eth0 inside the container.
+  A delay is introduced before connecting to give the container time to fully initialize its network namespace.
+  See the comment near `wg_easy_container_additional_networks` in defaults/main.yml for details.
+#}
+{% if wg_easy_container_additional_networks | length > 0 %}
+ExecStartPost={{ devture_systemd_docker_base_host_command_sh }} -c 'sleep {{ wg_easy_container_additional_networks_connect_delay_seconds }}'
+{% for network in wg_easy_container_additional_networks %}
+ExecStartPost={{ devture_systemd_docker_base_host_command_docker }} network connect {{ network }} {{ wg_easy_identifier }}
+{% endfor %}
+{% endif %}
 
 ExecStop=-{{ devture_systemd_docker_base_host_command_sh }} -c '{{ devture_systemd_docker_base_host_command_docker }} stop -t {{ devture_systemd_docker_base_container_stop_grace_time_seconds }} {{ wg_easy_identifier }} 2>/dev/null || true'
 ExecStop=-{{ devture_systemd_docker_base_host_command_sh }} -c '{{ devture_systemd_docker_base_host_command_docker }} rm {{ wg_easy_identifier }} 2>/dev/null || true'
