@@ -29,6 +29,7 @@
       community.docker.docker_network:
         name: "{{ wg_easy_container_network }}"
         state: absent
+      register: wg_easy_network_deletion_result
 
     - name: Ensure WireGuard Easy container network does not exist via ansible.builtin.command
       when: devture_systemd_docker_base_container_network_creation_method == 'command'
@@ -36,8 +37,8 @@
         cmd: >-
           {{ devture_systemd_docker_base_host_command_docker }} network rm
           {{ wg_easy_container_network }}
-      register: network_deletion_result
-      changed_when: wg_easy_container_network in network_deletion_result.stdout
+      register: wg_easy_network_deletion_result
+      changed_when: wg_easy_container_network in wg_easy_network_deletion_result.stdout
 
     - name: Ensure WireGuard Easy path does not exist
       ansible.builtin.file:
