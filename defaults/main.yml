@@ -41,6 +41,9 @@ wg_easy_container_image_force_pull: "{{ wg_easy_container_image.endswith(':lates
 # The base container network. It will be auto-created by this role if it doesn't exist already.
 wg_easy_container_network: "{{ wg_easy_identifier }}"
 
+# Control if the container network is deleted on uninstalling.
+wg_easy_container_network_deletion_enabled: true
+
 # Specify how the container publishes its WireGuard port (as defined by `wg_easy_environment_variables_additional_variable_init_port`).
 #
 # Takes an "<ip>:<port>" or "<port>" value (e.g. "127.0.0.1:51820"), just a port number or an empty string to not expose.
