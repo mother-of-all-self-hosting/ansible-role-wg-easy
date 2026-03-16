@@ -52,7 +52,7 @@ wg_easy_container_wireguard_bind_port: "{{ wg_easy_environment_variables_additio
 # Specify how the container publishes its HTTP port (as defined by `wg_easy_environment_variables_additional_variable_port`)
 #
 # Takes an "<ip>:<port>" or "<port>" value (e.g. "127.0.0.1:8080"), just a port number or an empty string to not expose.
-wg_easy_container_http_bind_port: ""
+wg_easy_container_http_host_bind_port: ""
 
 # A list of additional container networks that the container would be connected to.
 # The role does not create these networks, so make sure they already exist.
@@ -347,7 +347,7 @@ wg_easy_environment_variables_additional_variable_host: 0.0.0.0
 
 # Controls the `PORT` environment variable.
 # The TCP port that the container process listens on for providing its web UI.
-# Also see: `wg_easy_container_http_bind_port`
+# Also see: `wg_easy_container_http_host_bind_port`
 wg_easy_environment_variables_additional_variable_port: 8080
 
 # Controls the `INSECURE` environment variable.

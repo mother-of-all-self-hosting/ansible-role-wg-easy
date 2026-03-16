@@ -10,6 +10,7 @@
       Please change your configuration to rename the variable (`{{ item.old }}` -> `{{ item.new }}`).
   when: "lookup('ansible.builtin.varnames', ('^' + item.old + '$'), wantlist=True) | length > 0"
   with_items:
+    - { "old": "wg_easy_container_http_bind_port", "new": "wg_easy_container_http_host_bind_port" }
     - { "old": "wg_easy_systemd_required_systemd_services_list_default", "new": "wg_easy_systemd_required_services_list_default" }
     - { "old": "wg_easy_systemd_required_systemd_services_list_auto", "new": "wg_easy_systemd_required_services_list_auto" }
     - { "old": "wg_easy_systemd_required_systemd_services_list_custom", "new": "wg_easy_systemd_required_services_list_custom" }
