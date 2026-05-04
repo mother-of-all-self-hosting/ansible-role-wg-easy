@@ -36,7 +36,6 @@ wg_easy_container_image_registry_prefix: "{{ wg_easy_container_image_registry_pr
 wg_easy_container_image_registry_prefix_upstream: "{{ wg_easy_container_image_registry_prefix_upstream_default }}"
 wg_easy_container_image_registry_prefix_upstream_default: ghcr.io/
 wg_easy_container_image_tag: "{{ wg_easy_version }}"
-wg_easy_container_image_force_pull: "{{ wg_easy_container_image.endswith(':latest') }}"
 
 # The base container network. It will be auto-created by this role if it doesn't exist already.
 wg_easy_container_network: "{{ wg_easy_identifier }}"
