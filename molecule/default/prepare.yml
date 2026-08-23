@@ -19,6 +19,10 @@
       ansible.builtin.package:
         name:
           - python3-requests
+          # Provides `modprobe`, which the role's systemd unit calls to load
+          # the iptables modules that wg-quick needs. The base image does not
+          # ship it, as containers do not usually load kernel modules.
+          - kmod
         state: present
 
     - name: Ensure Docker is installed for WireGuard Easy Molecule tests preparation
