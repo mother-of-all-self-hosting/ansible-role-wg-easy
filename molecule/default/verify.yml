@@ -66,12 +66,9 @@
 
     - name: Assert the running WireGuard Easy is the version this role installs
       ansible.builtin.assert:
-        that:
-          - wg_easy_information.json.currentRelease | regex_replace('^v', '') is match(wg_easy_defaults.wg_easy_version | string | regex_escape)
-        fail_msg: >-
-          wg-easy reports {{ wg_easy_information.json.currentRelease | default('nothing') }},
-          but the role asks for {{ wg_easy_defaults.wg_easy_version }}
-        success_msg: "wg-easy reports version {{ wg_easy_information.json.currentRelease }}"
+        that: wg_easy_information.json.currentRelease | regex_replace('^v', '') is match(wg_easy_defaults.wg_easy_version | string | regex_escape)
+        fail_msg: "WireGuard Easy reports {{ wg_easy_information.json.currentRelease | default('none') }}, expected {{ wg_easy_defaults.wg_easy_version }}"
+        success_msg: "WireGuard Easy reports {{ wg_easy_information.json.currentRelease }}"
 
     # A wg-easy whose unattended setup did not complete redirects every request
     # to its `/setup/1` wizard, serves no VPN and routes no API - yet still
