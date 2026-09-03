@@ -64,9 +64,6 @@
       retries: 120
       delay: 5
 
-    # wg-easy reports its release with a leading `v` (`v15.4.0`), while the
-    # role variable does not carry one. A prefix match tolerates any build
-    # metadata that a release may append.
     - name: Assert the running WireGuard Easy is the version this role installs
       ansible.builtin.assert:
         that:
