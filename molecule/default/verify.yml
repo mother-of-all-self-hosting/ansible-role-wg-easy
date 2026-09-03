@@ -266,12 +266,12 @@
         fail_msg: "Unexpected client configuration: {{ wg_easy_client_configuration.content }}"
         success_msg: "wg-easy hands out a client configuration built out of the role's settings"
 
-    - name: Show WireGuard Easy verification summary
+    - name: Show the WireGuard Easy verification summary
       ansible.builtin.debug:
         msg:
           - "WireGuard Easy systemd: {{ wg_easy_service.status.ActiveState }}"
-          - "Version: {{ wg_easy_information.json.currentRelease }}"
-          - "Web interface: {{ wg_easy_endpoint.status }} -> {{ wg_easy_endpoint.location }}"
-          - "Session: {{ wg_easy_session.json.username }}"
-          - "Client: {{ wg_easy_verify_client.name }} ({{ wg_easy_verify_client.ipv4Address }})"
-          - "Peer public key: {{ wg_easy_verify_client.publicKey }}"
+          - "WireGuard Easy version: {{ wg_easy_information.json.currentRelease }}"
+          - "WireGuard Easy web interface: {{ wg_easy_endpoint.status }} -> {{ wg_easy_endpoint.location }}"
+          - "WireGuard Easy session: {{ wg_easy_session.json.username }}"
+          - "WireGuard Easy client: {{ wg_easy_verify_client.name }} ({{ wg_easy_verify_client.ipv4Address }})"
+          - "WireGuard Easy peer public key: {{ wg_easy_verify_client.publicKey }}"
