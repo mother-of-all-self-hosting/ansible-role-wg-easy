@@ -18,6 +18,8 @@
     wg_easy_verify_client_name: molecule
 
   tasks:
+    - name: Verify that WireGuard Easy works
+      block:
     # The role is not included in this playbook, so its defaults are not in
     # scope. Reading defaults/main.yml directly ties the version assertion
     # below.
@@ -276,3 +278,19 @@
           - "WireGuard Easy session: {{ wg_easy_session.json.username }}"
           - "WireGuard Easy client: {{ wg_easy_verify_client.name }} ({{ wg_easy_verify_client.ipv4Address }})"
           - "WireGuard Easy peer public key: {{ wg_easy_verify_client.publicKey }}"
+
+      rescue:
+        # Whatever went wrong, the reason is almost always in the systemd service log.
+        - name: Retrieve the WireGuard Easy systemd service log
+          ansible.builtin.command:
+            cmd: journalctl --no-pager --output=cat --unit=wg-easy.service
+          register: wg_easy_service_log
+          changed_when: false
+
+        - name: Show the WireGuard Easy systemd service log
+          ansible.builtin.debug:
+            var: wg_easy_service_log.stdout_lines
+
+        - name: Fail because verification did not pass
+          ansible.builtin.fail:
+            msg: "WireGuard Easy verification failed. The systemd service log is printed above."
