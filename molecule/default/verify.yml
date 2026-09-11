@@ -17,6 +17,9 @@
     # WireGuard peers and hand out configuration for them.
     wg_easy_verify_client_name: molecule
 
+    wg_easy_verify_units:
+      - wg-easy.service
+
   tasks:
     - name: Verify that WireGuard Easy works
       block:
@@ -28,13 +31,14 @@
             file: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/defaults/main.yml"
             name: wg_easy_defaults
 
-        - name: Wait for the WireGuard Easy systemd service to become active (up to 180s)
+        - name: Wait for the WireGuard Easy systemd services to become active (up to 180s each)
           ansible.builtin.systemd_service:
-            name: wg-easy.service
-          register: wg_easy_service
-          until: wg_easy_service.status.ActiveState == 'active'
+            name: "{{ item }}"
+          register: wg_easy_services
+          until: wg_easy_services.status.ActiveState == 'active'
           retries: 36
           delay: 5
+          loop: "{{ wg_easy_verify_units }}"
           # So that giving up is reported by the assertion below rather than as a
           # wall of systemd unit properties.
           failed_when: false
@@ -42,17 +46,20 @@
         # `Restart=always` in the systemd unit means that even a container which crashes
         # and gets restarted reads as active here, so this is a precondition rather than
         # a result.
-        - name: Assert the WireGuard Easy systemd service is active
+        - name: Assert the WireGuard Easy systemd services are active
           ansible.builtin.assert:
-            that: wg_easy_service.status.ActiveState == 'active'
-            fail_msg: "wg-easy.service is not active ({{ wg_easy_service.status.ActiveState }})"
-            success_msg: "wg-easy.service is active"
+            that: wg_easy_services.results | map(attribute='status.ActiveState') | unique | list == ['active']
+            fail_msg: >-
+              Not every service is active:
+              {{ dict(wg_easy_verify_units | zip(wg_easy_services.results | map(attribute='status.ActiveState'))) }}
+            success_msg: "Every systemd service is active"
 
-        - name: Retrieve the WireGuard Easy systemd service log for debugging
+        - name: Retrieve the WireGuard Easy systemd services log for debugging
           when: wg_easy_debug_service_enabled | bool
           ansible.builtin.command:
-            cmd: journalctl --no-pager --output=cat --unit=wg-easy.service
+            cmd: "journalctl --no-pager --output=cat --unit={{ item }}"
           changed_when: false
+          loop: "{{ wg_easy_verify_units }}"
 
         # wg-easy answers this without authentication from the moment its HTTP
         # listener is up, which makes it the readiness probe. It also reports the
@@ -272,7 +279,7 @@
         - name: Show the WireGuard Easy verification summary
           ansible.builtin.debug:
             msg:
-              - "WireGuard Easy systemd: {{ wg_easy_service.status.ActiveState }}"
+              - "WireGuard Easy systemd: {% for unit, state in wg_easy_verify_units | zip(wg_easy_services.results | map(attribute='status.ActiveState')) %}{{ unit }} ({{ state }}){% if not loop.last %}, {% endif %}{% endfor %}"
               - "WireGuard Easy version: {{ wg_easy_information.json.currentRelease }}"
               - "WireGuard Easy web interface: {{ wg_easy_endpoint.status }} -> {{ wg_easy_endpoint.location }}"
               - "WireGuard Easy session: {{ wg_easy_session.json.username }}"
