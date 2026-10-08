@@ -83,7 +83,7 @@ wg_easy_environment_variables_additional_variable_init_password: ADMIN_PASSWORD_
 
 By default the service is configured to be hosted at `https://example.com/`. You can adjust the hostname of the web UI with the `wg_easy_hostname` variable.
 
-Previously (prior to wg-easy v15), a `wg_easy_path_prefix` variable could allow you to host wg-easy at a subpath (e.g. `wg_easy_path_prefix: /wg-easy`), but this is [no longer possible](https://github.com/wg-easy/wg-easy/issues/1704#issuecomment-2705873936), although such a feature [may re-appear later](https://github.com/wg-easy/wg-easy/issues/1704#issuecomment-2706575504).
+Previously (prior to WireGuard Easy v15), a `wg_easy_path_prefix` variable could allow you to host WireGuard Easy at a subpath (e.g. `wg_easy_path_prefix: /wg-easy`), but this is [no longer possible](https://github.com/wg-easy/wg-easy/issues/1704#issuecomment-2705873936), although such a feature [may re-appear later](https://github.com/wg-easy/wg-easy/issues/1704#issuecomment-2706575504).
 
 💡 WireGuard clients may optionally be pointed to a different hostname than the one used for the web UI. Refer to the section below about the WireGuard endpoint for details.
 
@@ -139,7 +139,7 @@ wg_easy_environment_variables_additional_variable_init_ipv6_cidr: "2001:db8::/32
 💡 The `wg_easy_environment_variables_additional_variable_init_ipv6_cidr` value you see above is what we use by default. It represents the documentation-reserved IPv6 CIDR value, but we're not only using it for documentation purposes, but because it's a GUA-like CIDR value. Refer to [Note about the IPv6 CIDR and IPv6 connectivity](#note-about-the-ipv6-cidr-and-ipv6-connectivity) for more details and for a recommended alternative if you can use your own GUA address.
 
 > [!WARNING]
-> If you need to change the IPv4/IPv6 CIDRs after the initial setup, you need to do so from the Admin Panel -> Interface page of the web UI, via the Change CIDR button. After changing the CIDR in wg-easy's settings, you must restart the wg-easy service for the changes to take effect.
+> If you need to change the IPv4/IPv6 CIDRs after the initial setup, you need to do so from the Admin Panel -> Interface page of the web UI, via the Change CIDR button. After changing the CIDR in wg-easy's settings, you must restart the WireGuard Easy service for the changes to take effect.
 
 ### Adjusting the default Allowed IPs
 
@@ -162,7 +162,7 @@ Docker automatically opens these ports in the server's firewall, so you **likely
 
 ### Adjusting the host's iptables configuration
 
-If you're running `iptables`/`ip6tables` on the host with a custom config (which whitelists some traffic and denies everything else), you may find that WireGuard clients cannot reach certain ports on server where wg-easy runs via its LAN IP address (e.g. `192.168.1.50`).
+If you're running `iptables`/`ip6tables` on the host with a custom config (which whitelists some traffic and denies everything else), you may find that WireGuard clients cannot reach certain ports on server where WireGuard Easy runs via its LAN IP address (e.g. `192.168.1.50`).
 
 You may wish to adjust your iptables configuration (typically `/etc/iptables/iptables.rules`) like this:
 
@@ -171,7 +171,7 @@ You may wish to adjust your iptables configuration (typically `/etc/iptables/ipt
 
 # Allow all private IPv4 ranges (RFC1918 private addresses) to access us via SSH.
 #
-# This allows wg-easy WireGuard clients which try to speak to us via our LAN IP to be able to reach us.
+# This allows WireGuard Easy WireGuard clients which try to speak to us via our LAN IP to be able to reach us.
 # They "exit" through wg-easy's container subnet (e.g. 172.18.0.1).
 -A INPUT -m tcp -p tcp --dport 22 -s 10.0.0.0/8 -j ACCEPT
 -A INPUT -m tcp -p tcp --dport 22 -s 172.16.0.0/12 -j ACCEPT
@@ -193,7 +193,7 @@ or for ip6tables (typically `/etc/iptables/ip6tables.rules`) like this:
 
 # Allow all private IPv6 ranges to access us via SSH.
 #
-# This allows wg-easy WireGuard clients which try to speak to us via our LAN IP to be able to reach us.
+# This allows WireGuard Easy WireGuard clients which try to speak to us via our LAN IP to be able to reach us.
 # They "exit" through wg-easy's container subnet (e.g. 172.18.0.1).
 # Unique Local Addresses (ULA)
 -A INPUT -p tcp --dport 22 -s fc00::/7 -j ACCEPT
@@ -219,7 +219,7 @@ Take a look at:
 - [`defaults/main.yml`](../defaults/main.yml) for some variables that you can customize via your `vars.yml` file. You can override settings (even those that don't have dedicated playbook variables) using the `wg_easy_environment_variables_additional_variables` variable
 
 >[!NOTE]
-> The new wg-easy version (after the v15 release) does not support most of the environment variables that were supported in previous versions. Most of the configuration happens via the web UI after installation. Refer to [Adjusting the post-installation configuration](#adjusting-the-post-installation-configuration) for more details.
+> The new WireGuard Easy version (after the v15 release) does not support most of the environment variables that were supported in previous versions. Most of the configuration happens via the web UI after installation. Refer to [Adjusting the post-installation configuration](#adjusting-the-post-installation-configuration) for more details.
 
 ## Installing
 
@@ -241,7 +241,7 @@ Depending on your configuration, you may need to go through a setup wizard first
 
 If you have provided a username (`wg_easy_environment_variables_additional_variable_init_username`) and password (`wg_easy_environment_variables_additional_variable_init_password`) before the first installation, the unattended setup process would have created these credentials for you, so you can log in with them. Otherwise, you'll see a setup wizard and can create your own credentials. For creating additional users, refer to [Creating additional users](#creating-additional-users).
 
-Similarly, if you have provided a hostname (`wg_easy_hostname` and/or `wg_easy_environment_variables_additional_variable_init_host`) and port (`wg_easy_environment_variables_additional_variable_init_port`) before the first installation, the unattended setup process would have initialized the wg-easy service with these values. Otherwise, you'll see a setup wizard about this.
+Similarly, if you have provided a hostname (`wg_easy_hostname` and/or `wg_easy_environment_variables_additional_variable_init_host`) and port (`wg_easy_environment_variables_additional_variable_init_port`) before the first installation, the unattended setup process would have initialized the WireGuard Easy service with these values. Otherwise, you'll see a setup wizard about this.
 
 ### Creating WireGuard clients
 
@@ -249,15 +249,15 @@ You can then create various Clients and import the configuration for them onto y
 
 ### Creating additional users
 
-**wg-easy does not yet allow managing users via the web UI**, but you can create additional users manually by editing its SQLite database (typically `/wg-easy/data/wg-easy.db`).
+**WireGuard Easy does not yet allow managing users via the web UI.** You can create additional users manually by editing its SQLite database (typically `/wg-easy/data/wg-easy.db`).
 
 Before you create additional users, be aware of the following:
 
 - Two Factor Authentication for each user can be enabled later on via the web UI, after logging in
-- user passwords need to be sufficiently strong or wg-easy will reject them during login (even before trying to compare to the password-hash value stored in the database)
+- user passwords need to be sufficiently strong or WireGuard Easy will reject them during login (even before trying to compare to the password-hash value stored in the database)
 - the `role` value for a user can be `1` (Administrator) or `2` (Client), but only `1` (Administrator) is a [permission](https://github.com/wg-easy/wg-easy/blob/2d9c75fd81094902b7b91bb4e699b4e4c991ff88/src/shared/utils/permissions.ts#L75-L106) that lets you do anything meaningful. The reason is that client-type users cannot create new clients. They can only manage clients associated with them, but not being able to create new ones means no clients are associated with them in the first place, so.. Administrator is the only user type that makes sense.
 - all Administrators (`role = 1`) users can see and managed all clients and settings
-- due to the above limitations, it's **not feasible to have a multi-user wg-easy installation where each user is independent of the others**. If you're OK with all your users being administrators and all data (client configs, etc.) being shared, then you may be OK with this.
+- due to the above limitations, it's **not feasible to have a multi-user WireGuard Easy installation where each user is independent of the others**. If you're OK with all your users being administrators and all data (client configs, etc.) being shared, then you may be OK with this.
 
 The steps for creating a new user are like this:
 
@@ -288,11 +288,11 @@ The steps for creating a new user are like this:
 >[!NOTE]
 > For IPv6 to work, you need your container networks to have been created with IPv6 support.
 
-💡 The Ansible wg-easy role goes against the upstream default and uses a [Global Unicast Address (GUA)](https://www.oreilly.com/library/view/ipv6-fundamentals-a/9780134670584/ch05.html)-like CIDR value (a documentation-reserved CIDR (`2001:db8::/32`) as per [RFC 3849](https://datatracker.ietf.org/doc/html/rfc3849)) instead of a [Unique Local Address (ULA)](https://en.wikipedia.org/wiki/Unique_local_address) one, as described below. Due to this, you should have outgoing IPv6 connectivity and it should be preferred over IPv4, as expected. **Most users can rely on our defaults and leave things as they are**, without having to do anything.
+💡 The Ansible WireGuard Easy role goes against the upstream default and uses a [Global Unicast Address (GUA)](https://www.oreilly.com/library/view/ipv6-fundamentals-a/9780134670584/ch05.html)-like CIDR value (a documentation-reserved CIDR (`2001:db8::/32`) as per [RFC 3849](https://datatracker.ietf.org/doc/html/rfc3849)) instead of a [Unique Local Address (ULA)](https://en.wikipedia.org/wiki/Unique_local_address) one, as described below. Due to this, you should have outgoing IPv6 connectivity and it should be preferred over IPv4, as expected. **Most users can rely on our defaults and leave things as they are**, without having to do anything.
 
-Below, we describe what upstream wg-easy does by default, why we're doing things differently and how you can improve on what we do by default (using a documentation-reserved IPv6 CIDR value).
+Below, we describe what upstream WireGuard Easy does by default, why we're doing things differently and how you can improve on what we do by default (using a documentation-reserved IPv6 CIDR value).
 
-By default, upstream wg-easy uses a [default CIDR value](https://github.com/wg-easy/wg-easy/blob/0597470f4cea239b4a572208ef01d490e2ade2d2/src/server/database/migrations/0001_classy_the_stranger.sql#L6) of `fdcc:ad94:bacf:61a4::cafe:0/112`.
+By default, upstream WireGuard Easy uses a [default CIDR value](https://github.com/wg-easy/wg-easy/blob/0597470f4cea239b4a572208ef01d490e2ade2d2/src/server/database/migrations/0001_classy_the_stranger.sql#L6) of `fdcc:ad94:bacf:61a4::cafe:0/112`.
 
 Most operating systems, when dealing with a network interface with a ULA address (instead of a GUA address), will prefer IPv4 instead of IPv6 for outgoing connections.
 
@@ -313,16 +313,16 @@ To get full IPv6 connectivity and have it be preferred on most operating systems
 
 To do the latter, **you need to change the IPv6 CIDR used by wg-easy** to a GUA or GUA-like one. The proposed workaround [here](https://www.reddit.com/r/ipv6/comments/ngug1e/comment/gyw1ni8/) suggests using a random real/global/public IPv6 subnet for your WireGuard clients. While these addresses will only be used inside your WireGuard for NAT purposes, using them will still break your connectivity to this subnet.
 
-💡 The wg-easy IPv6 CIDR can be changed:
+💡 The WireGuard Easy IPv6 CIDR can be changed:
 
 - initially (before setup), as part of the initial unattended setup via the `wg_easy_environment_variables_additional_variable_init_ipv6_cidr` variable
 - subsequently, from the Admin Panel -> Interface page of the web UI, via the Change CIDR button.
 
 We propose 2 alternatives for your IPv6 CIDR:
 
-- (recommended) a CIDR derived from a GUA one that you own. For example, if you get `2001:555:5555:5555:/64` from your ISP for your network, you could assign something like `2001:555:5555:5555::0:cafe:0/112` for your 1st (`0`-th) wg-easy instance. If you run more wg-easy instances in your network, you could use `2001:555:5555:5555::1:cafe:0/112`, `2001:555:5555:5555::2:cafe:0/112`, etc. for them, so that they all have unique subnets.
+- (recommended) a CIDR derived from a GUA one that you own. For example, if you get `2001:555:5555:5555:/64` from your ISP for your network, you could assign something like `2001:555:5555:5555::0:cafe:0/112` for your 1st (`0`-th) WireGuard Easy instance. If you run more WireGuard Easy instances in your network, you could use `2001:555:5555:5555::1:cafe:0/112`, `2001:555:5555:5555::2:cafe:0/112`, etc. for them, so that they all have unique subnets.
 
-- (not so recommended, but the default for the wg-easy Ansible role) [a GUA-like CIDR](https://en.wikipedia.org/wiki/IPv6_address#Special-purpose_addresses). We've had success using the documentation-reserved CIDR (`2001:db8::/32`) as per [RFC 3849](https://datatracker.ietf.org/doc/html/rfc3849). You can pick a random CIDR value from this range, like `2001:db8:100:5000::0:cafe:0/112` and use it for your 1st (`0`-th) wg-easy instance. If you run more wg-easy instances in your network, you could use `2001:db8:100:5000::1:cafe:0/112`, `2001:db8:100:5000::2:cafe:0/112`, etc. for them, so that they all have unique subnets. Using documentation-reserved addresses for non-documentation-purposes is not great, but we've confirmed that it works well in practice. These addresses are only behind your NAT and never used for real addressing outside of it, so there shouldn't be a problem.
+- (not so recommended, but the default for the WireGuard Easy Ansible role) [a GUA-like CIDR](https://en.wikipedia.org/wiki/IPv6_address#Special-purpose_addresses). We've had success using the documentation-reserved CIDR (`2001:db8::/32`) as per [RFC 3849](https://datatracker.ietf.org/doc/html/rfc3849). You can pick a random CIDR value from this range, like `2001:db8:100:5000::0:cafe:0/112` and use it for your 1st (`0`-th) WireGuard Easy instance. If you run more WireGuard Easy instances in your network, you could use `2001:db8:100:5000::1:cafe:0/112`, `2001:db8:100:5000::2:cafe:0/112`, etc. for them, so that they all have unique subnets. Using documentation-reserved addresses for non-documentation-purposes is not great, but we've confirmed that it works well in practice. These addresses are only behind your NAT and never used for real addressing outside of it, so there shouldn't be a problem.
 
 Regardless of what you choose, your WireGuard clients will get a network interface which uses a GUA or GUA-like IPv6 address instead of a ULA IPv6 address. With that, IPv6 connectivity will be preferred over IPv4 even without custom changes to `/etc/gai.conf`.
 
