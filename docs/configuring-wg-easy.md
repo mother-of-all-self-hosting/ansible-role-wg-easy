@@ -219,7 +219,7 @@ Take a look at:
 - [`defaults/main.yml`](../defaults/main.yml) for some variables that you can customize via your `vars.yml` file. You can override settings (even those that don't have dedicated playbook variables) using the `wg_easy_environment_variables_additional_variables` variable
 
 >[!NOTE]
-> The new WireGuard Easy version (after the v15 release) does not support most of the environment variables that were supported in previous versions. Most of the configuration happens via the web UI after installation. Refer to [Adjusting the post-installation configuration](#adjusting-the-post-installation-configuration) for more details.
+> The new WireGuard Easy version (after the v15 release) does not support most of the environment variables that were supported in previous versions. Most of the configuration happens via the web UI after installation.
 
 ## Installing
 
