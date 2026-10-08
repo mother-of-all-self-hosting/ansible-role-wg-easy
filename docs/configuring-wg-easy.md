@@ -63,7 +63,9 @@ wg_easy_hostname: "example.com"
 
 After adjusting the hostname, make sure to adjust your DNS records to point the domain to your server.
 
-**Note**: hosting WireGuard Easy under a subpath (by configuring the `wg_easy_path_prefix` variable) does not seem to be possible due to WireGuard Easy's technical limitations.
+**Note**: previously (prior to WireGuard Easy v15), a `wg_easy_path_prefix` variable could allow you to host WireGuard Easy at a subpath (e.g. `wg_easy_path_prefix: /wg-easy`), but this is [no longer possible](https://github.com/wg-easy/wg-easy/issues/1704#issuecomment-2705873936), although such a feature [may re-appear later](https://github.com/wg-easy/wg-easy/issues/1704#issuecomment-2706575504).
+
+💡 WireGuard clients may optionally be pointed to a different hostname than the one used for the web UI. Refer to the section below about the WireGuard endpoint for details.
 
 ### Setting details for the initial setup user
 
@@ -78,14 +80,6 @@ wg_easy_environment_variables_additional_variable_init_password: ADMIN_PASSWORD_
 
 >[!NOTE]
 > Subsequent changes to them will not affect the existing user.
-
-### Adjusting the web UI URL
-
-By default the service is configured to be hosted at `https://example.com/`. You can adjust the hostname of the web UI with the `wg_easy_hostname` variable.
-
-Previously (prior to WireGuard Easy v15), a `wg_easy_path_prefix` variable could allow you to host WireGuard Easy at a subpath (e.g. `wg_easy_path_prefix: /wg-easy`), but this is [no longer possible](https://github.com/wg-easy/wg-easy/issues/1704#issuecomment-2705873936), although such a feature [may re-appear later](https://github.com/wg-easy/wg-easy/issues/1704#issuecomment-2706575504).
-
-💡 WireGuard clients may optionally be pointed to a different hostname than the one used for the web UI. Refer to the section below about the WireGuard endpoint for details.
 
 ### Adjusting the Wireguard endpoint
 
