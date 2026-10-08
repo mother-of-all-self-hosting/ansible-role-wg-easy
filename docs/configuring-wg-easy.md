@@ -18,11 +18,15 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 # Setting up WireGuard Easy
 
-This is an [Ansible](https://www.ansible.com/) role which installs [WireGuard Easy](https://wg-easybudget.org) to run as a [Docker](https://www.docker.com/) container wrapped in a systemd service.
+This is an [Ansible](https://www.ansible.com/) role which installs [WireGuard Easy](https://github.com/wg-easy/wg-easy) to run as a [Docker](https://www.docker.com/) container wrapped in a systemd service.
 
-WireGuard Easy is a local-first personal finance tool.
+WireGuard Easy is the easiest way to run [WireGuard](https://www.wireguard.com/) VPN + Web-based Admin UI.
 
-See the project's [documentation](https://wg-easybudget.org/docs/) to learn what WireGuard Easy does and why it might be useful to you.
+See the project's [documentation](https://wg-easy.github.io/wg-easy/latest/) to learn what WireGuard Easy does and why it might be useful to you.
+
+## Prerequisites
+
+To run a WireGuard Easy instance it is necessary to prepare a modern Linux kernel which supports WireGuard.
 
 ## Adjusting the playbook configuration
 
@@ -61,7 +65,7 @@ After adjusting the hostname, make sure to adjust your DNS records to point the 
 
 **Note**: hosting WireGuard Easy under a subpath (by configuring the `wg_easy_path_prefix` variable) does not seem to be possible due to WireGuard Easy's technical limitations.
 
-### Set details for the initial setup user
+### Setting details for the initial setup user
 
 You can create an instance's admin user for accessing the web UI by adding the following configuration to your `vars.yml` file. Make sure to replace values with your own ones.
 
@@ -77,13 +81,11 @@ wg_easy_environment_variables_additional_variable_init_password: ADMIN_PASSWORD_
 
 ### Adjusting the web UI URL
 
-In the example configuration above, we configure the service to be hosted at `https://wg-easy.example.com/`.
+By default the service is configured to be hosted at `https://example.com/`. You can adjust the hostname of the web UI with the `wg_easy_hostname` variable.
 
-You can adjust the hostname of the web UI with the `wg_easy_hostname` variable.
+Previously (prior to wg-easy v15), a `wg_easy_path_prefix` variable could allow you to host wg-easy at a subpath (e.g. `wg_easy_path_prefix: /wg-easy`), but this is [no longer possible](https://github.com/wg-easy/wg-easy/issues/1704#issuecomment-2705873936), although such a feature [may re-appear later](https://github.com/wg-easy/wg-easy/issues/1704#issuecomment-2706575504).
 
-Previously (prior to wg-easy v15), a `wg_easy_path_prefix` variable could allow you to host wg-easy at a subpath (e.g. `wg_easy_path_prefix: /wg-easy`), but this is [no longer possible](https://github.com/wg-easy/wg-easy/issues/1704#issuecomment-2705873936) and such a feature [may re-appear later](https://github.com/wg-easy/wg-easy/issues/1704#issuecomment-2706575504).
-
-💡 WireGuard clients may optionally be pointed to a different hostname than the one used for the web UI. Refer to [Adjusting the WireGuard endpoint](#adjusting-the-wireguard-endpoint) for details.
+💡 WireGuard clients may optionally be pointed to a different hostname than the one used for the web UI. Refer to the section below about the WireGuard endpoint for details.
 
 ### Adjusting the Wireguard endpoint
 
@@ -170,7 +172,7 @@ You may wish to adjust your iptables configuration (typically `/etc/iptables/ipt
 # Allow all private IPv4 ranges (RFC1918 private addresses) to access us via SSH.
 #
 # This allows wg-easy WireGuard clients which try to speak to us via our LAN IP to be able to reach us.
-# They "exit" through mash-wg-easy's container subnet (e.g. 172.18.0.1).
+# They "exit" through wg-easy's container subnet (e.g. 172.18.0.1).
 -A INPUT -m tcp -p tcp --dport 22 -s 10.0.0.0/8 -j ACCEPT
 -A INPUT -m tcp -p tcp --dport 22 -s 172.16.0.0/12 -j ACCEPT
 -A INPUT -m tcp -p tcp --dport 22 -s 192.168.0.0/16 -j ACCEPT
@@ -192,7 +194,7 @@ or for ip6tables (typically `/etc/iptables/ip6tables.rules`) like this:
 # Allow all private IPv6 ranges to access us via SSH.
 #
 # This allows wg-easy WireGuard clients which try to speak to us via our LAN IP to be able to reach us.
-# They "exit" through mash-wg-easy's container subnet (e.g. 172.18.0.1).
+# They "exit" through wg-easy's container subnet (e.g. 172.18.0.1).
 # Unique Local Addresses (ULA)
 -A INPUT -p tcp --dport 22 -s fc00::/7 -j ACCEPT
 # Link-local addresses
@@ -247,7 +249,7 @@ You can then create various Clients and import the configuration for them onto y
 
 ### Creating additional users
 
-**wg-easy does not yet allow managing users via the web UI**, but you can create additional users manually by editing its SQLite database (typically `/mash/wg-easy/data/wg-easy.db`).
+**wg-easy does not yet allow managing users via the web UI**, but you can create additional users manually by editing its SQLite database (typically `/wg-easy/data/wg-easy.db`).
 
 Before you create additional users, be aware of the following:
 
@@ -263,7 +265,7 @@ The steps for creating a new user are like this:
 2. Generate a strong password (e.g. `pwgen -s 1 64`)
 3. Hash the password using [Argon2id](https://en.wikipedia.org/wiki/Argon2)
     - Here's a one-liner to do it using [PHP](https://php.net/): `php -r 'echo password_hash("YOUR_PASSWORD_HERE", \PASSWORD_ARGON2ID);'`
-4. Open the database using `sqlite3 /mash/wg-easy/data/wg-easy.db`
+4. Open the database using `sqlite3 /wg-easy/data/wg-easy.db`
 5. Run a query like this:
 
   ```sql
@@ -283,8 +285,8 @@ The steps for creating a new user are like this:
 
 ## Note about the IPv6 CIDR and IPv6 connectivity
 
-> [!WARNING]
-> For IPv6 to work, you need your container networks to have been created with IPv6 support (`devture_systemd_docker_base_ipv6_enabled: true`) as mentioned in the [Prerequisites](#prerequisites). If your wg-easy container network (`mash-wg-easy`) was created before you flipped this setting to `true`, you may need to stop the wg-easy service, delete the container network manually (`docker network rm mash-wg-easy`) and re-run the playbook to have it create the container network anew.
+>[!NOTE]
+> For IPv6 to work, you need your container networks to have been created with IPv6 support.
 
 💡 The Ansible wg-easy role goes against the upstream default and uses a [Global Unicast Address (GUA)](https://www.oreilly.com/library/view/ipv6-fundamentals-a/9780134670584/ch05.html)-like CIDR value (a documentation-reserved CIDR (`2001:db8::/32`) as per [RFC 3849](https://datatracker.ietf.org/doc/html/rfc3849)) instead of a [Unique Local Address (ULA)](https://en.wikipedia.org/wiki/Unique_local_address) one, as described below. Due to this, you should have outgoing IPv6 connectivity and it should be preferred over IPv4, as expected. **Most users can rely on our defaults and leave things as they are**, without having to do anything.
 
