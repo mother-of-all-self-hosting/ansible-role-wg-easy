@@ -303,7 +303,7 @@ This means that you may get a `10/10` score on the [test-ipv6.com](https://test-
 
 We don't like this behavior of defaulting to IPv4 and avoiding IPv6. We believe that just like IPv6 is typically preferred over IPv4 (when **not** using a VPN), the same should happen when you are using a VPN. If your computer is avoiding IPv6 and is preferring IPv4, then you don't really have "proper IPv6" connectivity. In this day and age, most services on the internet are either IPv4-only or dual-stack (and less often IPv6 only), so a client that prefers IPv4 will pretty much always stick to IPv4 in practice.
 
-📖 This issue is also discussed [here](https://www.reddit.com/r/WireGuard/comments/q8t9bj/wireguard_doesnt_seem_to_work_with_ipv6/) and a workaround is documented [here](https://www.reddit.com/r/ipv6/comments/ngug1e/comment/gyw1ni8/). We'll summarize these findings and propose alternatives below.
+📖 This issue is also discussed on [this page](https://www.reddit.com/r/WireGuard/comments/q8t9bj/wireguard_doesnt_seem_to_work_with_ipv6/), and a workaround is documented on [this page](https://www.reddit.com/r/ipv6/comments/ngug1e/comment/gyw1ni8/). We'll summarize these findings and propose alternatives below.
 
 To get full IPv6 connectivity and have it be preferred on most operating systems, you'll:
 
@@ -311,7 +311,7 @@ To get full IPv6 connectivity and have it be preferred on most operating systems
 
 - or you fix this globally by switching from ULA addresses to GUA addresses
 
-To do the latter, **you need to change the IPv6 CIDR used by wg-easy** to a GUA or GUA-like one. The proposed workaround [here](https://www.reddit.com/r/ipv6/comments/ngug1e/comment/gyw1ni8/) suggests using a random real/global/public IPv6 subnet for your WireGuard clients. While these addresses will only be used inside your WireGuard for NAT purposes, using them will still break your connectivity to this subnet.
+To do the latter, **you need to change the IPv6 CIDR used by wg-easy** to a GUA or GUA-like one. The proposed workaround on [this page](https://www.reddit.com/r/ipv6/comments/ngug1e/comment/gyw1ni8/) suggests using a random real/global/public IPv6 subnet for your WireGuard clients. While these addresses will only be used inside your WireGuard for NAT purposes, using them will still break your connectivity to this subnet.
 
 💡 The WireGuard Easy IPv6 CIDR can be changed:
 
