@@ -67,7 +67,7 @@ After adjusting the hostname, make sure to adjust your DNS records to point the 
 
 💡 WireGuard clients may optionally be pointed to a different hostname than the one used for the web UI. Refer to the section below about the WireGuard endpoint for details.
 
-### Setting details for the initial setup user
+### Setting details for the initial setup user (optional)
 
 You can create an instance's admin user for accessing the web UI by adding the following configuration to your `vars.yml` file. Make sure to replace values with your own ones.
 
