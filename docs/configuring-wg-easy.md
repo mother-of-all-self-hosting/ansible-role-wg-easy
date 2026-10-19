@@ -204,6 +204,12 @@ or for ip6tables (typically `/etc/iptables/ip6tables.rules`) like this:
 
 After doing so, you'll wish to restart `iptables`/`ip6tables`. Restarting iptables typically necessitates restarting Docker (`docker.service`) as well.
 
+### Integrating with Prometheus (optional)
+
+WireGuard Easy can natively expose metrics to Prometheus.
+
+If you are looking for an integration, you can check out the MASH playbook. Refer to [this section of the documentation on the playbook](https://github.com/mother-of-all-self-hosting/mash-playbook/blob/main/docs/services/wg-easy.md#integrating-with-prometheus-optional) for more information.
+
 ### Extending the configuration
 
 There are some additional things you may wish to configure about the service.
